@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <script language="JavaScript">
+      /*
+       * Copyright: Microsoft 2019
+       *
+       * An example visualizer for use with Cart+Pole simulators.
+       */
+      const params = new URLSearchParams(window.location.search);
+      const darkMode = params.get("_theme") === "dark";
+
+      // optional overrides for parameter names
+      const posKey = params.has("pos") ? params.get("pos") : "cart_position";
+      const angleKey = params.has("angle") ? params.get("angle") : "pole_angle";
+
+      function init() {
+        const pole = document.getElementById("pole");
+        const cart = document.getElementById("cart");
+
+        // adjust our colors based upon theme.
+        if (darkMode) {
+          document.body.style.backgroundColor = "#333";
+          document.body.style.color = "white";
+          pole.style.fill = "white";
+        }
+
+        window.addEventListener(
+          "message",
+          (event) => {
+            // convert message to formatted JSON text for display
+            const data = JSON.parse(event.data);
+            const str = JSON.stringify(data, null, 4);
+            const out = document.getElementById("out");
+            out.textContent = str;
+
+            // read state out of message and convert units
+            const pos = data.state[posKey];
+            const angle = (data.state[angleKey] * 180.0) / Math.PI;
+
+            // update positions of graphical elements
+            cart.setAttribute("transform", `translate(${pos} 0)`);
+            pole.setAttribute(
+              "transform",
+              `translate(${pos} 0) rotate(${angle} 0 0)`
+            );
+          },
+          false
+        );
+      }
+    </script>
+  </head>
+  <body>
+    <pre id="out" style="display: box; position: absolute">Waiting...</pre>
+    <svg
+      preserveAspectRatio="xMidYMid meet"
+      height="100%"
+      width="100%"
+      viewBox="-1 -1 2 2"
+    >
+      <rect
+        id="track"
+        x="-0.5"
+        y="-0.025"
+        width="1"
+        height="0.05"
+        fill="grey"
+      />
+      <rect
+        id="cart"
+        x="-0.15"
+        y="-0.05"
+        width="0.3"
+        height="0.1"
+        fill="grey"
+      />
+      <rect
+        id="pole"
+        x="-0.025"
+        y="-0.5"
+        width="0.05"
+        height="0.5"
+        fill="#333"
+      />
+    </svg>
+    <script language="JavaScript">
+      init();
+    </script>
+  </body>
+</html>
