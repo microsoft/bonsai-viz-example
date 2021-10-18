@@ -12,10 +12,17 @@
       // optional overrides for parameter names
       const posKey = params.has("pos") ? params.get("pos") : "cart_position";
       const angleKey = params.has("angle") ? params.get("angle") : "pole_angle";
+      const debug = params.has("debug")
+        ? params.get("debug") === "true"
+        : false;
 
       function init() {
         const pole = document.getElementById("pole");
         const cart = document.getElementById("cart");
+        const out = document.getElementById("out");
+        if (debug) {
+          out.textContent = "Waiting...";
+        }
 
         // adjust our colors based upon theme.
         if (darkMode) {
@@ -31,7 +38,9 @@
             const data = JSON.parse(event.data);
             const str = JSON.stringify(data, null, 4);
             const out = document.getElementById("out");
-            out.textContent = str;
+            if (debug) {
+              out.textContent = str;
+            }
 
             // read state out of message and convert units
             const pos = data.state[posKey];
@@ -50,7 +59,7 @@
     </script>
   </head>
   <body>
-    <pre id="out" style="display: box; position: absolute">Waiting...</pre>
+    <pre id="out" style="display: box; position: absolute"></pre>
     <svg
       preserveAspectRatio="xMidYMid meet"
       height="100%"
