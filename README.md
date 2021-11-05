@@ -1,4 +1,4 @@
-# Bonsai Cartpole Visualizer Examples
+# Bonsai Visualizer Examples
 
 ## Intro
 
@@ -14,6 +14,8 @@ You can use pure JavaScript, or a web framework like React or Angular. We use th
 
 The plugin will also be passed a variety of query parameters when it is loaded. Some of them are reserved by the plugin API, but a developer can have the user pass in additional configuration parameters as necessary.
 
+We have the following examples in this repo:
+
 ## Cart + Pole
 
 ![Cart + Pole](cartpole/ExampleViz.png "A cart+pole system.")
@@ -24,7 +26,7 @@ The plugin will also be passed a variety of query parameters when it is loaded. 
 
 ## Plastics Extruder
 
-![Plastics Extruder](simpletank/ExampleViz.png "An industrial extruder.")
+![Plastics Extruder](plasticsextruder/ExampleViz.png "An industrial extruder.")
 
 ## Contributing
 
