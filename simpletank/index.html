@@ -1,0 +1,164 @@
+<html>
+  <head>
+    <script language="JavaScript">
+      /*
+       * Copyright: Microsoft 2019
+       *
+       * An example visualizer for use with Extruder simulators.
+       */
+      const svgns = "http://www.w3.org/2000/svg";
+      const params = new URLSearchParams(window.location.search);
+      const darkMode = params.get("_theme") === "dark";
+      const debug = params.get("debug") === "true";
+
+      // optional overrides for parameter names
+      const tankLevelKey = "LI100";
+      const setPointKey = "LI100_SP";
+      const valveLevelKey = "FY100";
+
+      // set on load()
+      let svgDoc = undefined;
+
+      let maxTankHeight = 300;
+      let valveSize = 15;
+      let tankOriginY = 0;
+
+      // utility setAttributes
+      function setAttributes(el, attributes) {
+        for (var attr in attributes) el.setAttribute(attr, attributes[attr]);
+      }
+
+      // setup the document
+      function setup() {
+        svgDoc = document.getElementById("imported-svg").contentDocument;
+        if (svgDoc) {
+          // cache the tank height
+          const tankLevel = svgDoc.getElementById("level");
+          maxTankHeight = parseInt(tankLevel.getAttribute("height"));
+          tankOriginY = parseInt(tankLevel.getAttribute("y"));
+
+          // and valve size
+          const valveElem = svgDoc.getElementById("valve");
+          valveSize = parseInt(valveElem.getAttribute("r"));
+
+          // move the mask into a clipPath dynamically
+          let clipPath = svgDoc.createElementNS(svgns, "clipPath");
+          clipPath.setAttribute("id", "clip");
+          const level = svgDoc.getElementById("level");
+          level.appendChild(clipPath);
+          const mask = svgDoc.getElementById("mask");
+          clipPath.appendChild(mask);
+
+          // apply the clipPath
+          const tankWrapper = svgDoc.getElementById("tankWrapper");
+          tankWrapper.setAttribute("style", "clip-path: url(#clip)");
+
+          // adjust our colors based upon theme.
+          if (darkMode) {
+            document.body.style.backgroundColor = "#333";
+            document.body.style.color = "white";
+
+            const tank = svgDoc.getElementById("tank");
+            const pipes = svgDoc.getElementById("pipes");
+            tank.setAttribute("stroke", "white");
+            pipes.setAttribute("stroke", "white");
+          }
+        } // if svgDoc
+
+        // loading text
+        if (debug) {
+          const out = document.getElementById("out");
+          out.textContent = "Waiting...";
+        }
+
+        // initial update
+        update({
+          state: {
+            LI100: 50,
+            LI100_SP: 50,
+          },
+          action: {
+            FY100: 25,
+          },
+        });
+      }
+
+      // update the visualization from state and action data
+      function update(data) {
+        // convert message to formatted JSON text for display
+        const str = JSON.stringify(data, null, 2);
+
+        if (debug) {
+          const out = document.getElementById("out");
+          out.textContent = str;
+        }
+
+        // update positions of graphical elements
+        if (svgDoc) {
+          try {
+            // tank level
+            const tankLevel = data.state[tankLevelKey];
+            const tankLevelElem = svgDoc.getElementById("level");
+            tankLevelElem.setAttribute(
+              "height",
+              `${(tankLevel / 100.0) * maxTankHeight}`
+            );
+            tankLevelElem.setAttribute(
+              "y",
+              `${(1.0 - tankLevel / 100.0) * maxTankHeight + tankOriginY}`
+            );
+
+            // tank set point
+            const setPoint = data.state[setPointKey];
+            const tankSetPointElem = svgDoc.getElementById("setPoint");
+            tankSetPointElem.setAttribute(
+              "transform",
+              `translate(0 ${(1.0 - setPoint / 100.0) * maxTankHeight})`
+            );
+
+            // valve
+            const valveLevel = data.action[valveLevelKey];
+            const valveElem = svgDoc.getElementById("valve");
+            const radius = (valveLevel / 100.0) * valveSize;
+            valveElem.setAttribute("r", `${radius}`);
+          } catch (e) {
+            // ignore
+          }
+        }
+      }
+
+      function init() {
+        // on load
+        window.addEventListener("load", () => {
+          setup();
+        });
+
+        // on message
+        window.addEventListener(
+          "message",
+          (event) => {
+            const data = JSON.parse(event.data);
+            update(data);
+          },
+          false
+        );
+      }
+    </script>
+  </head>
+  <body>
+    <pre
+      id="out"
+      style="font-size: x-small; display: box; position: absolute"
+    ></pre>
+    <object
+      data="simpleTank.svg"
+      type="image/svg+xml"
+      id="imported-svg"
+      width="100%"
+      height="100%"
+    ></object>
+    <script language="JavaScript">
+      init();
+    </script>
+  </body>
+</html>

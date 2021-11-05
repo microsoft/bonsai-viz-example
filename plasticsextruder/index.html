@@ -1,0 +1,199 @@
+<html>
+  <head>
+    <script language="JavaScript">
+      /*
+       * Copyright: Microsoft 2019
+       *
+       * An example visualizer for use with Extruder simulators.
+       */
+      const svgns = "http://www.w3.org/2000/svg";
+      const params = new URLSearchParams(window.location.search);
+      const darkMode = params.get("_theme") === "dark";
+      const debug = params.get("debug") === "true";
+
+      // optional overrides for parameter names
+      const speedKey = "screw_angular_speed";
+      const cutterKey = "cutter_frequency";
+      const productLengthKey = "product_length";
+      const flowRateKey = "flow_rate";
+      const tempKey = "temperature";
+
+      // set on load()
+      let svgDoc = undefined;
+
+      const RadiansPerRevolution = Math.PI * 2;
+
+      // constant for pixels/meter, calculated from SVG element width
+      let productUnitLength = 300;
+
+      // temp to color
+      // cold = 100C
+      // hot = 250C
+      function colorForTemp(tempC) {
+        const minTemp = 100;
+        const maxTemp = 250;
+        const t = (tempC - minTemp) / (maxTemp - minTemp);
+        const r = 1.0 * t;
+        const g = 0;
+        const b = 1.0 * (1.0 - t);
+        return `rgb(${r * 255}, ${g * 255}, ${b * 255})`;
+      }
+
+      // utility setAttributes
+      function setAttributes(el, attributes) {
+        for (var attr in attributes) el.setAttribute(attr, attributes[attr]);
+      }
+
+      function init() {
+        // on load
+        window.addEventListener("load", () => {
+          svgDoc = document.getElementById("extruder-svg").contentDocument;
+          if (svgDoc) {
+            // cache the drawn length
+            const extrusion = svgDoc.getElementById("extrusion");
+            productUnitLength = parseInt(extrusion.getAttribute("width"));
+
+            // move the mask into a clipPath dynamically
+            let clipPath = svgDoc.createElementNS(svgns, "clipPath");
+            clipPath.setAttribute("id", "clip");
+
+            const extruder = svgDoc.getElementById("extruder");
+            extruder.appendChild(clipPath);
+
+            const mask = svgDoc.getElementById("mask");
+            clipPath.appendChild(mask);
+
+            // apply the clipPath
+            const screwWrapper = svgDoc.getElementById("screwWrapper");
+            screwWrapper.setAttribute("style", "clip-path: url(#clip)");
+
+            // create the screw animation
+            let screwAnim = svgDoc.createElementNS(svgns, "animateTransform");
+            setAttributes(screwAnim, {
+              id: "screwAnim",
+              attributeName: "transform",
+              type: "translate",
+              from: 0,
+              to: 20,
+              dur: "10s",
+              repeatCount: "indefinite",
+            });
+
+            const screw = svgDoc.getElementById("screw");
+            screw.appendChild(screwAnim);
+
+            // cutter animation
+            let cutterAnim = svgDoc.createElementNS(svgns, "animate");
+            setAttributes(cutterAnim, {
+              id: "cutterAnim",
+              attributeName: "fill-opacity",
+              values: "0.0; 1.0;",
+              dur: "1s",
+              repeatCount: "indefinite",
+            });
+
+            const cutter = svgDoc.getElementById("cutter");
+            cutter.appendChild(cutterAnim);
+
+            // a little animation for the pellets
+            const pellets = svgDoc.getElementById("pellets");
+            let dots = pellets.children;
+            for (let i = 0; i < dots.length; i++) {
+              let dot = dots[i];
+
+              let dotAnim = svgDoc.createElementNS(svgns, "animateTransform");
+              setAttributes(dotAnim, {
+                attributeName: "transform",
+                type: "translate",
+                dur: "1s",
+                values: "-1 0; 1 0; -1 0",
+                repeatCount: "indefinite",
+                begin: `-${Math.random()}`,
+              });
+              dot.appendChild(dotAnim);
+            }
+
+            // initial temp
+            const plastic = svgDoc.getElementById("plastic");
+            plastic.setAttribute("fill", colorForTemp(190));
+
+            // adjust our colors based upon theme.
+            if (darkMode) {
+              document.body.style.backgroundColor = "#333";
+              document.body.style.color = "white";
+
+              const hopper = svgDoc.getElementById("hopper");
+              const barrel = svgDoc.getElementById("barrel");
+              hopper.setAttribute("stroke", "white");
+              barrel.setAttribute("stroke", "white");
+            }
+          } // if svgDoc
+
+          // loading text
+          if (debug) {
+            const out = document.getElementById("out");
+            out.textContent = "Waiting...";
+          }
+        });
+
+        // on message
+        window.addEventListener(
+          "message",
+          (event) => {
+            // convert message to formatted JSON text for display
+            const data = JSON.parse(event.data);
+            const str = JSON.stringify(data.state, null, 2);
+
+            if (debug) {
+              const out = document.getElementById("out");
+              out.textContent = str;
+            }
+
+            // read state out of message and convert units
+            const speed = data.state[speedKey];
+            const cutter = data.state[cutterKey]; // 10Hz
+            const flowRate = data.state[flowRateKey];
+            const cutLength = data.state[productLengthKey];
+            const temp = data.state[tempKey]; // 190 + 273.15
+
+            // update positions of graphical elements
+            if (svgDoc) {
+              let anim = svgDoc.getElementById("screwAnim");
+              anim.setAttribute("dur", `${speed / RadiansPerRevolution}s`);
+
+              anim = svgDoc.getElementById("cutterAnim");
+              anim.setAttribute("dur", `${cutter}s`);
+
+              const extrusion = svgDoc.getElementById("extrusion");
+              extrusion.setAttribute(
+                "width",
+                `${cutLength * productUnitLength}`
+              );
+
+              const plastic = svgDoc.getElementById("plastic");
+              const color = colorForTemp(temp - 273.15); // temp K -> C
+              plastic.setAttribute("fill", `${color}`);
+            }
+          },
+          false
+        );
+      }
+    </script>
+  </head>
+  <body>
+    <pre
+      id="out"
+      style="font-size: x-small; display: box; position: absolute"
+    ></pre>
+    <object
+      data="extruder.svg"
+      type="image/svg+xml"
+      id="extruder-svg"
+      width="100%"
+      height="100%"
+    ></object>
+    <script language="JavaScript">
+      init();
+    </script>
+  </body>
+</html>
