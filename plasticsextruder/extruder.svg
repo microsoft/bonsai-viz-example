@@ -1,0 +1,55 @@
+<svg width="600" height="300" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="extruder">
+<path id="plastic" d="M235 156L145 217V236H345V226H355V166H345V156H235Z" fill="#3DA3DD"/>
+<path id="barrel" d="M165 156H145V236H345V226H355V166H345V156H236" stroke="black" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="hopper" d="M161 64V124L185 161M221 161L246 124V64" stroke="black" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<g id="pellets">
+<circle id="Ellipse 3" cx="173" cy="104" r="6" fill="#808080"/>
+<circle id="Ellipse 4" cx="173" cy="119" r="6" fill="#808080"/>
+<circle id="Ellipse 5" cx="182" cy="133" r="6" fill="#808080"/>
+<circle id="Ellipse 6" cx="191" cy="147" r="6" fill="#808080"/>
+<circle id="Ellipse 7" cx="203" cy="155" r="6" fill="#808080"/>
+<circle id="Ellipse 9" cx="217" cy="145" r="6" fill="#808080"/>
+<circle id="Ellipse 10" cx="199" cy="135" r="6" fill="#808080"/>
+<circle id="Ellipse 11" cx="191" cy="118" r="6" fill="#808080"/>
+<circle id="Ellipse 12" cx="215" cy="129" r="6" fill="#808080"/>
+<circle id="Ellipse 13" cx="229" cy="129" r="6" fill="#808080"/>
+<circle id="Ellipse 14" cx="235" cy="113" r="6" fill="#808080"/>
+<circle id="Ellipse 15" cx="207" cy="117" r="6" fill="#808080"/>
+<circle id="Ellipse 16" cx="221" cy="110" r="6" fill="#808080"/>
+<circle id="Ellipse 17" cx="197" cy="104" r="6" fill="#808080"/>
+<circle id="Ellipse 18" cx="187" cy="94" r="6" fill="#808080"/>
+<circle id="Ellipse 19" cx="213" cy="96" r="6" fill="#808080"/>
+<circle id="Ellipse 20" cx="233" cy="96" r="6" fill="#808080"/>
+</g>
+<rect id="extrusion" x="370" y="180" width="200" height="30" fill="#808080"/>
+<g id="screwWrapper">
+<g id="screw">
+<path id="Vector 3" d="M135 227C135 215.5 136.244 206.014 140 197C143.756 187.986 145 179 145 167" stroke="black" stroke-width="4"/>
+<path id="Vector 4" d="M145 167C145 178.5 146.244 187.986 150 197C153.756 206.014 155 215 155 227" stroke="black" stroke-opacity="0.2" stroke-width="4"/>
+<path id="Vector 1" d="M155 226C155 214.5 156.244 205.014 160 196C163.756 186.986 165 178 165 166" stroke="black" stroke-width="4"/>
+<path id="Vector 2" d="M165 166C165 177.5 166.244 186.986 170 196C173.756 205.014 175 214 175 226" stroke="black" stroke-opacity="0.2" stroke-width="4"/>
+<path id="Vector 1_2" d="M175 226C175 214.5 176.244 205.014 180 196C183.756 186.986 185 178 185 166" stroke="black" stroke-width="4"/>
+<path id="Vector 2_2" d="M185 166C185 177.5 186.244 186.986 190 196C193.756 205.014 195 214 195 226" stroke="black" stroke-opacity="0.2" stroke-width="4"/>
+<path id="Vector 1_3" d="M195 226C195 214.5 196.244 205.014 200 196C203.756 186.986 205 178 205 166" stroke="black" stroke-width="4"/>
+<path id="Vector 2_3" d="M205 166C205 177.5 206.244 186.986 210 196C213.756 205.014 215 214 215 226" stroke="black" stroke-opacity="0.2" stroke-width="4"/>
+<path id="Vector 1_4" d="M215 226C215 214.5 216.244 205.014 220 196C223.756 186.986 225 178 225 166" stroke="black" stroke-width="4"/>
+<path id="Vector 2_4" d="M225 166C225 177.5 226.244 186.986 230 196C233.756 205.014 235 214 235 226" stroke="black" stroke-opacity="0.2" stroke-width="4"/>
+<path id="Vector 1_5" d="M235 226C235 214.5 236.244 205.014 240 196C243.756 186.986 245 178 245 166" stroke="black" stroke-width="4"/>
+<path id="Vector 2_5" d="M245 166C245 177.5 246.244 186.986 250 196C253.756 205.014 255 214 255 226" stroke="black" stroke-opacity="0.2" stroke-width="4"/>
+<path id="Vector 1_6" d="M255 226C255 214.5 256.244 205.014 260 196C263.756 186.986 265 178 265 166" stroke="black" stroke-width="4"/>
+<path id="Vector 2_6" d="M265 166C265 177.5 266.244 186.986 270 196C273.756 205.014 275 214 275 226" stroke="black" stroke-opacity="0.2" stroke-width="4"/>
+<path id="Vector 1_7" d="M275 226C275 214.5 276.244 205.014 280 196C283.756 186.986 285 178 285 166" stroke="black" stroke-width="4"/>
+<path id="Vector 2_7" d="M285 166C285 177.5 286.244 186.986 290 196C293.756 205.014 295 214 295 226" stroke="black" stroke-opacity="0.2" stroke-width="4"/>
+<path id="Vector 1_8" d="M295 226C295 214.5 296.244 205.014 300 196C303.756 186.986 305 178 305 166" stroke="black" stroke-width="4"/>
+<path id="Vector 2_8" d="M305 166C305 177.5 306.244 186.986 310 196C313.756 205.014 315 214 315 226" stroke="black" stroke-opacity="0.2" stroke-width="4"/>
+<path id="Vector 1_9" d="M315 226C315 214.5 316.244 205.014 320 196C323.756 186.986 325 178 325 166" stroke="black" stroke-width="4"/>
+<path id="Vector 5" d="M335 226C335 214.5 336.244 205.014 340 196C343.756 186.986 345 178 345 166" stroke="black" stroke-width="4"/>
+<path id="Vector 2_9" d="M325 166C325 177.5 326.244 186.986 330 196C333.756 205.014 335 214 335 226" stroke="black" stroke-opacity="0.2" stroke-width="4"/>
+<path id="Vector 6" d="M345 166C345 177.5 346.244 186.986 350 196C353.756 205.014 355 214 355 226" stroke="black" stroke-opacity="0.2" stroke-width="4"/>
+</g>
+<rect id="mask" x="155" y="157" width="190" height="79" fill="#FF8383" fill-opacity="0.5"/>
+</g>
+<rect id="cutter" x="360" y="170" width="10" height="50" fill="#00BA61" fill-opacity="0.9"/>
+</g>
+</svg>
