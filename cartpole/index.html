@@ -12,6 +12,9 @@
       // optional overrides for parameter names
       const posKey = params.has("pos") ? params.get("pos") : "cart_position";
       const angleKey = params.has("angle") ? params.get("angle") : "pole_angle";
+      const targetKey = params.has("target")
+        ? params.get("target")
+        : "target_pole_position";
       const debug = params.has("debug")
         ? params.get("debug") === "true"
         : false;
@@ -20,6 +23,7 @@
         const pole = document.getElementById("pole");
         const cart = document.getElementById("cart");
         const out = document.getElementById("out");
+        const target = document.getElementById("target");
         if (debug) {
           out.textContent = "Waiting...";
         }
@@ -37,7 +41,6 @@
             // convert message to formatted JSON text for display
             const data = JSON.parse(event.data);
             const str = JSON.stringify(data, null, 4);
-            const out = document.getElementById("out");
             if (debug) {
               out.textContent = str;
             }
@@ -45,6 +48,7 @@
             // read state out of message and convert units
             const pos = data.state[posKey];
             const angle = (data.state[angleKey] * 180.0) / Math.PI;
+            const targetPos = data.state[targetKey];
 
             // update positions of graphical elements
             cart.setAttribute("transform", `translate(${pos} 0)`);
@@ -52,6 +56,7 @@
               "transform",
               `translate(${pos} 0) rotate(${angle} 0 0)`
             );
+            target.setAttribute("transform", `translate(${targetPos} 0)`);
           },
           false
         );
@@ -89,6 +94,14 @@
         width="0.05"
         height="0.5"
         fill="#333"
+      />
+      <rect
+        id="target"
+        x="-0.02"
+        y="-0.02"
+        width="0.04"
+        height="0.04"
+        fill="lightblue"
       />
     </svg>
     <script language="JavaScript">
